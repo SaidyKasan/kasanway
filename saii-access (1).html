@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SAII ACCESS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --g1:#C4962A;
+  --g2:#E2BF6E;
+  --g3:#F0DDA0;
+  --ink:#16120D;
+  --ink2:#2C2620;
+  --sand:#F9F5EE;
+  --sand2:#F1EAD8;
+  --sand3:#E8DEC8;
+  --fog:#EDE5D4;
+  --muted:#8C7D6A;
+  --border:#DDD3BC;
+  --white:#FFFFFF;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--sand);color:var(--ink);overflow-x:hidden;}
+h1,h2,h3,h4{font-family:'Cormorant',serif;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 56px;height:68px;
+  background:rgba(249,245,238,0.95);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  transition:height 0.3s;
+}
+.nav-logo{font-family:'Cormorant',serif;font-size:1.3rem;font-weight:600;letter-spacing:0.25em;text-transform:uppercase;text-decoration:none;color:var(--ink);}
+.nav-logo em{font-style:normal;color:var(--g1);}
+.nav-links{display:flex;gap:44px;}
+.nav-links a{font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;text-decoration:none;color:var(--muted);transition:color 0.2s;font-weight:400;}
+.nav-links a:hover{color:var(--g1);}
+.nav-right{display:flex;align-items:center;gap:22px;}
+.nav-cart{background:none;border:none;color:var(--muted);font-size:1rem;cursor:pointer;position:relative;transition:color 0.2s;}
+.nav-cart:hover{color:var(--g1);}
+.nav-cart-count{position:absolute;top:-6px;right:-8px;background:var(--g1);color:#fff;font-size:0.55rem;font-weight:600;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.nav-ham{display:none;background:none;border:none;color:var(--ink);font-size:1rem;cursor:pointer;}
+
+/* ── HERO ── */
+.hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;}
+.hero-slides{position:absolute;inset:0;}
+.hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.4s ease;}
+.hero-slide.on{opacity:1;}
+.hero-slide::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,rgba(22,18,13,0.72) 0%,rgba(22,18,13,0.2) 60%,transparent 100%);}
+.s1{background-image:url('hero1.jpg');}
+.s2{background-image:url('hero2.jpg');}
+.s3{background-image:url('hero3.jpg');}
+
+.hero-body{position:relative;z-index:2;padding:0 56px;max-width:700px;}
+.hero-tag{font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--g3);margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.hero-tag::before{content:'';display:block;width:28px;height:1px;background:var(--g2);}
+.hero-h1{font-family:'Cormorant',serif;font-size:clamp(3.4rem,8vw,6.8rem);font-weight:300;line-height:0.95;color:#fff;letter-spacing:-0.01em;margin-bottom:36px;}
+.hero-h1 span{display:block;font-style:italic;color:var(--g3);}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-light{display:inline-flex;align-items:center;gap:8px;padding:13px 30px;background:rgba(255,255,255,0.92);color:var(--ink);border:none;font-family:'Outfit',sans-serif;font-size:0.72rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all 0.22s;}
+.btn-light:hover{background:#fff;color:var(--g1);}
+.btn-gold{display:inline-flex;align-items:center;gap:8px;padding:13px 30px;background:var(--g1);color:#fff;border:none;font-family:'Outfit',sans-serif;font-size:0.72rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;transition:background 0.22s;}
+.btn-gold:hover{background:var(--g2);color:var(--ink);}
+
+.hero-dots{position:absolute;bottom:36px;left:56px;display:flex;gap:8px;z-index:3;}
+.hdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.3);border:none;cursor:pointer;transition:all 0.3s;padding:0;}
+.hdot.on{background:var(--g2);transform:scale(1.4);}
+
+/* ── MARQUEE ── */
+.marquee-bar{background:var(--ink2);padding:13px 0;overflow:hidden;white-space:nowrap;}
+.marquee-track{display:inline-block;animation:marquee 28s linear infinite;}
+.marquee-track span{font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--g2);margin:0 40px;}
+.marquee-track span i{margin-right:10px;font-size:0.5rem;vertical-align:middle;color:var(--g1);}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ── SUNGLASSES ── */
+.shop{padding:80px 56px;background:var(--sand);}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;}
+.sec-title{font-family:'Cormorant',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:300;line-height:1;}
+.sec-sub{color:var(--muted);font-size:0.84rem;margin-top:6px;}
+
+.shop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
+.shop-card{background:var(--white);overflow:hidden;position:relative;cursor:pointer;}
+.shop-card-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;transition:transform 0.7s ease;filter:brightness(0.95);}
+.shop-card:hover .shop-card-img{transform:scale(1.05);filter:brightness(1);}
+.shop-card-overlay{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(22,18,13,0.85) 0%,transparent 100%);transform:translateY(100%);transition:transform 0.35s ease;}
+.shop-card:hover .shop-card-overlay{transform:translateY(0);}
+.shop-card-overlay-btn{width:100%;padding:11px;background:var(--g1);color:#fff;border:none;font-family:'Outfit',sans-serif;font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
+.shop-card-overlay-btn:hover{background:var(--g2);color:var(--ink);}
+.shop-info{padding:16px 18px 20px;background:var(--white);}
+.shop-name{font-family:'Cormorant',serif;font-size:1.1rem;font-weight:400;margin-bottom:3px;}
+.shop-desc{font-size:0.7rem;color:var(--muted);margin-bottom:12px;letter-spacing:0.04em;}
+.shop-row{display:flex;align-items:center;justify-content:space-between;}
+.shop-price{font-family:'Cormorant',serif;font-size:1.2rem;color:var(--g1);font-weight:400;}
+.shop-add{background:none;border:1px solid var(--border);color:var(--muted);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:6px 12px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s;}
+.shop-add:hover{border-color:var(--g1);color:var(--g1);}
+.shop-add.added{border-color:#5a9a5a;color:#5a9a5a;}
+
+/* ── STORY ── */
+.story{background:var(--sand2);padding:72px 56px;}
+.story-inner{max-width:680px;}
+.story-label{font-size:0.65rem;letter-spacing:0.26em;text-transform:uppercase;color:var(--g1);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.story-label::before{content:'';width:20px;height:1px;background:var(--g1);display:block;}
+.story-h2{font-family:'Cormorant',serif;font-size:clamp(2rem,3.5vw,2.9rem);font-weight:300;line-height:1.15;margin-bottom:26px;}
+.story-p{font-size:0.88rem;line-height:1.82;color:#5C5040;margin-bottom:12px;}
+.story-more{display:none;}
+.story-more.on{display:block;}
+.story-more .story-p:last-child{font-family:'Cormorant',serif;font-style:italic;font-size:1rem;color:var(--g1);margin-top:6px;}
+.story-toggle{background:none;border:none;color:var(--g1);font-size:0.7rem;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;font-family:'Outfit',sans-serif;display:inline-flex;align-items:center;gap:7px;margin-top:16px;padding:0;transition:gap 0.2s;}
+.story-toggle:hover{gap:12px;}
+
+/* ── ACCESS ── */
+.access{padding:80px 56px;background:var(--ink);}
+.access .sec-title{color:#fff;}
+.access .sec-sub{color:#8C7D6A;}
+.access-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:48px;}
+.acc-card{background:#1E1A14;padding:44px 36px 40px;border-top:2px solid transparent;transition:all 0.3s;position:relative;overflow:hidden;}
+.acc-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(196,150,42,0.04) 0%,transparent 60%);opacity:0;transition:opacity 0.3s;pointer-events:none;}
+.acc-card:hover{border-color:var(--g1);background:#242018;}
+.acc-card:hover::before{opacity:1;}
+.acc-icon{font-size:1.5rem;color:var(--g1);margin-bottom:24px;display:block;}
+.acc-title{font-family:'Cormorant',serif;font-size:1.5rem;font-weight:300;color:#fff;margin-bottom:12px;}
+.acc-desc{font-size:0.82rem;color:#6A5E50;line-height:1.8;margin-bottom:30px;}
+.acc-btn{background:none;border:none;color:var(--g1);font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-family:'Outfit',sans-serif;display:inline-flex;align-items:center;gap:8px;padding:8px 0;transition:gap 0.2s;position:relative;z-index:2;min-height:44px;}
+.acc-btn:hover{gap:14px;}
+
+/* ── FOOTER ── */
+footer{background:#1E1A14;padding:64px 56px 32px;border-top:1px solid #2a2520;}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.6fr;gap:52px;margin-bottom:52px;}
+.foot-logo{font-family:'Cormorant',serif;font-size:1.2rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--sand);text-decoration:none;display:block;margin-bottom:12px;}
+.foot-logo em{font-style:normal;color:var(--g1);}
+.foot-tag{font-size:0.8rem;color:#C8BAA8;line-height:1.7;margin-bottom:0;}
+.foot-col-title{font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--g2);margin-bottom:18px;font-weight:500;}
+.foot-links{list-style:none;}
+.foot-links li{margin-bottom:10px;}
+.foot-links a{color:#C8BAA8;text-decoration:none;font-size:0.82rem;transition:color 0.2s;}
+.foot-links a:hover{color:#fff;}
+.foot-nl-wrap{display:flex;margin-bottom:16px;}
+.foot-nl-input{flex:1;padding:11px 14px;background:rgba(255,255,255,0.04);border:1px solid #1E1A14;border-right:none;color:var(--sand);font-family:'Outfit',sans-serif;font-size:0.82rem;}
+.foot-nl-input:focus{outline:none;border-color:var(--g1);}
+.foot-nl-input::placeholder{color:#8a7a62;}
+.foot-nl-btn{padding:11px 16px;background:var(--g1);color:#fff;border:none;cursor:pointer;font-size:0.8rem;transition:background 0.2s;}
+.foot-nl-btn:hover{background:var(--g2);color:var(--ink);}
+.foot-contact{font-size:0.86rem;color:#C8BAA8;line-height:2.1;} .foot-contact p{color:#C8BAA8;}
+.foot-contact a{color:#C8BAA8;text-decoration:none;transition:color 0.2s;}
+.foot-contact a:hover{color:#fff;}
+.foot-socials{display:flex;gap:12px;margin-top:18px;}
+.soc-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1rem;transition:transform 0.2s,opacity 0.2s;}
+.soc-icon:hover{transform:translateY(-3px);opacity:0.85;}
+.soc-ig{background:transparent;color:var(--g1);}
+.soc-fb{background:transparent;color:var(--g1);}
+.soc-pi{background:transparent;color:var(--g1);}
+.foot-bottom{padding-top:28px;border-top:1px solid #1A1510;display:flex;justify-content:space-between;align-items:center;font-size:0.72rem;color:#C8BAA8;flex-wrap:wrap;gap:10px;}
+.foot-bottom a{color:#C8BAA8;text-decoration:none;margin-left:20px;transition:color 0.2s;}
+.foot-bottom a:hover{color:var(--g1);}
+
+/* ── MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(16,14,9,0.75);z-index:500;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.on{display:flex;}
+.modal-box{background:var(--sand);width:100%;max-width:460px;animation:mup 0.26s ease;}
+@keyframes mup{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.modal-head{padding:26px 30px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.modal-head h3{font-family:'Cormorant',serif;font-size:1.4rem;font-weight:400;}
+.modal-x{background:none;border:none;color:var(--muted);font-size:1rem;cursor:pointer;transition:color 0.2s;}
+.modal-x:hover{color:var(--ink);}
+.modal-body{padding:24px 30px 30px;}
+.f-group{margin-bottom:15px;}
+.f-label{display:block;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.f-input{width:100%;padding:11px 13px;background:var(--white);border:1px solid var(--border);color:var(--ink);font-family:'Outfit',sans-serif;font-size:0.86rem;transition:border-color 0.2s;}
+.f-input:focus{outline:none;border-color:var(--g1);}
+.f-input::placeholder{color:#C0B49E;}
+select.f-input option{background:var(--white);}
+textarea.f-input{min-height:86px;resize:vertical;}
+.f-submit{width:100%;padding:14px;background:var(--ink);color:var(--white);border:none;font-family:'Outfit',sans-serif;font-size:0.72rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;margin-top:6px;transition:background 0.2s;}
+.f-submit:hover{background:var(--g1);}
+
+/* SUCCESS */
+.succ-body{padding:52px 36px;text-align:center;}
+.succ-body i{font-size:2rem;color:var(--g1);margin-bottom:16px;display:block;}
+.succ-body h3{font-family:'Cormorant',serif;font-size:1.5rem;font-weight:300;margin-bottom:10px;}
+.succ-body p{font-size:0.84rem;color:var(--muted);line-height:1.7;margin-bottom:26px;}
+.succ-body button{padding:12px 28px;background:var(--ink);color:var(--white);border:none;font-family:'Outfit',sans-serif;font-size:0.72rem;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
+.succ-body button:hover{background:var(--g1);}
+
+/* ── CART ── */
+.cart-veil{display:none;position:fixed;inset:0;background:rgba(16,14,9,0.4);z-index:400;}
+.cart-veil.on{display:block;}
+.cart-panel{position:fixed;top:0;right:-420px;width:100%;max-width:420px;height:100%;background:var(--white);z-index:401;display:flex;flex-direction:column;transition:right 0.34s cubic-bezier(.4,0,.2,1);border-left:1px solid var(--border);}
+.cart-panel.on{right:0;}
+.cart-top{padding:24px 26px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);background:var(--sand);}
+.cart-top h3{font-family:'Cormorant',serif;font-size:1.3rem;font-weight:400;}
+.cart-top button{background:none;border:none;font-size:1rem;color:var(--muted);cursor:pointer;transition:color 0.2s;}
+.cart-top button:hover{color:var(--ink);}
+.cart-mid{flex:1;overflow-y:auto;padding:16px 26px;}
+.cart-empty{text-align:center;color:var(--muted);padding:48px 0;font-size:0.86rem;}
+.cart-empty i{font-size:1.6rem;display:block;margin-bottom:10px;color:var(--border);}
+.c-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);}
+.c-item img{width:68px;height:68px;object-fit:cover;}
+.c-item-info{flex:1;}
+.c-item-name{font-weight:500;font-size:0.86rem;margin-bottom:3px;}
+.c-item-sub{font-size:0.7rem;color:var(--muted);margin-bottom:5px;}
+.c-item-price{font-family:'Cormorant',serif;color:var(--g1);font-size:0.95rem;}
+.c-item-rm{background:none;border:none;color:#ccc;cursor:pointer;font-size:0.78rem;transition:color 0.2s;}
+.c-item-rm:hover{color:var(--muted);}
+.cart-bot{padding:16px 26px 26px;border-top:1px solid var(--border);background:var(--sand);}
+.cart-tot{display:flex;justify-content:space-between;margin-bottom:14px;font-family:'Cormorant',serif;font-size:1.1rem;}
+.cart-checkout{width:100%;padding:14px;background:var(--ink);color:var(--white);border:none;font-family:'Outfit',sans-serif;font-size:0.72rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
+.cart-checkout:hover{background:var(--g1);}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(48px);background:var(--ink2);color:var(--sand);padding:11px 22px;font-size:0.78rem;z-index:999;opacity:0;transition:all 0.25s;white-space:nowrap;border-left:3px solid var(--g1);}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── MOBILE NAV ── */
+.mob-nav{display:none;position:fixed;top:68px;left:0;right:0;background:rgba(249,245,238,0.98);backdrop-filter:blur(12px);flex-direction:column;z-index:199;border-bottom:1px solid var(--border);}
+.mob-nav.on{display:flex;}
+.mob-nav a{color:var(--muted);text-decoration:none;font-size:0.82rem;letter-spacing:0.12em;text-transform:uppercase;padding:17px 28px;border-bottom:1px solid var(--border);transition:color 0.2s;}
+.mob-nav a:hover{color:var(--g1);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1080px){
+  .shop-grid{grid-template-columns:repeat(2,1fr);}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:40px;}
+}
+@media(max-width:860px){
+  nav{padding:0 20px;height:60px;}
+  .nav-links{display:none;}
+  .nav-ham{display:block;}
+  .mob-nav{top:60px;}
+  .hero-body{padding:0 24px;max-width:100%;}
+  .hero-h1{font-size:clamp(2.6rem,11vw,4rem);}
+  .hero-tag{font-size:0.62rem;}
+  .hero-btns{flex-direction:column;align-items:flex-start;gap:10px;}
+  .btn-light,.btn-gold{width:100%;justify-content:center;padding:15px 24px;font-size:0.75rem;}
+  .shop,.story,.access{padding:52px 20px;}
+  .shop-grid{grid-template-columns:repeat(2,1fr);gap:12px;}
+  .sec-title{font-size:1.8rem;}
+  .access-grid{grid-template-columns:1fr;gap:12px;}
+  .acc-card{padding:32px 24px;}
+  .story-inner{max-width:100%;}
+  .story-h2{font-size:1.8rem;}
+  footer{padding:44px 20px 24px;}
+  .foot-grid{grid-template-columns:1fr;gap:28px;}
+  .foot-bottom{flex-direction:column;align-items:flex-start;gap:8px;}
+  .foot-bottom a{margin-left:0;margin-right:16px;}
+  .hero-dots{left:24px;bottom:24px;}
+  .marquee-track span{font-size:0.62rem;margin:0 24px;}
+}
+@media(max-width:480px){
+  .shop-grid{grid-template-columns:1fr;}
+  .shop-card-img{aspect-ratio:4/3;}
+  .nav-logo{font-size:1rem;letter-spacing:0.16em;}
+  .hero-h1{font-size:2.4rem;}
+  .acc-card{padding:28px 20px;}
+  .foot-nl-wrap{flex-direction:column;}
+  .foot-nl-input{border-right:1px solid #1E1A14;border-bottom:none;width:100%;}
+  .foot-nl-btn{width:100%;padding:12px;}
+  .cart-panel{max-width:100%;}
+  .modal-box{margin:0;border-radius:0;}
+  .modal-bg{padding:0;align-items:flex-end;}
+  .foot-socials{gap:20px;}
+  .soc-icon{width:44px;height:44px;font-size:1.1rem;}
+  .foot-contact p{font-size:0.9rem;line-height:2.4;}
+  .foot-contact a{font-size:0.9rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#home" class="nav-logo">SAII <em>ACCESS</em></a>
+  <div class="nav-links">
+    <a href="#shop">Sunglasses</a>
+    <a href="#story">Our Story</a>
+    <a href="#access">Access</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-cart" id="cartOpen"><i class="fas fa-shopping-bag"></i><span class="nav-cart-count" id="cartCount">0</span></button>
+    <button class="nav-ham" id="hamBtn"><i class="fas fa-bars"></i></button>
+  </div>
+</nav>
+
+<div class="mob-nav" id="mobNav">
+  <a href="#shop">Sunglasses</a>
+  <a href="#story">Our Story</a>
+  <a href="#access">Access</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-slides">
+    <div class="hero-slide s1 on"></div>
+    <div class="hero-slide s2"></div>
+    <div class="hero-slide s3"></div>
+  </div>
+  <div class="hero-body">
+    <p class="hero-tag">Premium Eyewear & Exclusive Access</p>
+    <h1 class="hero-h1">Access to<span>More.</span></h1>
+    <div class="hero-btns">
+      <a href="#shop" class="btn-light">Shop Sunglasses</a>
+      <button class="btn-gold" onclick="openWhatsApp('general')">Request Access</button>
+    </div>
+  </div>
+  <div class="hero-dots">
+    <button class="hdot on" data-i="0"></button>
+    <button class="hdot" data-i="1"></button>
+    <button class="hdot" data-i="2"></button>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-track">
+    <span><i class="fas fa-circle"></i>Premium Eyewear</span>
+    <span><i class="fas fa-circle"></i>Exclusive Access</span>
+    <span><i class="fas fa-circle"></i>Wines & MCC</span>
+    <span><i class="fas fa-circle"></i>SAII Residence</span>
+    <span><i class="fas fa-circle"></i>Curated Experiences</span>
+    <span><i class="fas fa-circle"></i>Access to More</span>
+    <span><i class="fas fa-circle"></i>Premium Eyewear</span>
+    <span><i class="fas fa-circle"></i>Exclusive Access</span>
+    <span><i class="fas fa-circle"></i>Wines & MCC</span>
+    <span><i class="fas fa-circle"></i>SAII Residence</span>
+    <span><i class="fas fa-circle"></i>Curated Experiences</span>
+    <span><i class="fas fa-circle"></i>Access to More</span>
+  </div>
+</div>
+
+<!-- SUNGLASSES -->
+<section class="shop" id="shop">
+  <div class="sec-head">
+    <div>
+      <h2 class="sec-title">Sunglasses</h2>
+      <p class="sec-sub">Premium eyewear for discerning individuals.</p>
+    </div>
+  </div>
+  <div class="shop-grid">
+    <div class="shop-card">
+      <img src="glasses1.jpg" class="shop-card-img" alt="SAII Aviator">
+      <div class="shop-card-overlay">
+        <button class="shop-card-overlay-btn shop-add" data-name="SAII Aviator" data-price="450" data-desc="Gold Frame · Polarized" data-img="glasses1.jpg">Add to Cart</button>
+      </div>
+      <div class="shop-info">
+        <p class="shop-name">SAII Aviator</p>
+        <p class="shop-desc">Gold Frame · Polarized</p>
+        <div class="shop-row">
+          <span class="shop-price">$450</span>
+          <button class="shop-add" data-name="SAII Aviator" data-price="450" data-desc="Gold Frame · Polarized" data-img="glasses1.jpg">Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="shop-card">
+      <img src="glasses2.jpg" class="shop-card-img" alt="SAII Classic">
+      <div class="shop-card-overlay">
+        <button class="shop-card-overlay-btn shop-add" data-name="SAII Classic" data-price="380" data-desc="Black Frame · UV Protection" data-img="glasses2.jpg">Add to Cart</button>
+      </div>
+      <div class="shop-info">
+        <p class="shop-name">SAII Classic</p>
+        <p class="shop-desc">Black Frame · UV Protection</p>
+        <div class="shop-row">
+          <span class="shop-price">$380</span>
+          <button class="shop-add" data-name="SAII Classic" data-price="380" data-desc="Black Frame · UV Protection" data-img="glasses2.jpg">Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="shop-card">
+      <img src="glasses3.jpg" class="shop-card-img" alt="SAII Modern">
+      <div class="shop-card-overlay">
+        <button class="shop-card-overlay-btn shop-add" data-name="SAII Modern" data-price="520" data-desc="Titanium · Blue Light" data-img="glasses3.jpg">Add to Cart</button>
+      </div>
+      <div class="shop-info">
+        <p class="shop-name">SAII Modern</p>
+        <p class="shop-desc">Titanium · Blue Light</p>
+        <div class="shop-row">
+          <span class="shop-price">$520</span>
+          <button class="shop-add" data-name="SAII Modern" data-price="520" data-desc="Titanium · Blue Light" data-img="glasses3.jpg">Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="shop-card">
+      <img src="glasses4.jpg" class="shop-card-img" alt="SAII Vintage">
+      <div class="shop-card-overlay">
+        <button class="shop-card-overlay-btn shop-add" data-name="SAII Vintage" data-price="420" data-desc="Brown Frame · Gradient" data-img="glasses4.jpg">Add to Cart</button>
+      </div>
+      <div class="shop-info">
+        <p class="shop-name">SAII Vintage</p>
+        <p class="shop-desc">Brown Frame · Gradient</p>
+        <div class="shop-row">
+          <span class="shop-price">$420</span>
+          <button class="shop-add" data-name="SAII Vintage" data-price="420" data-desc="Brown Frame · Gradient" data-img="glasses4.jpg">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story" id="story">
+  <div class="story-inner">
+    <p class="story-label">About SAII</p>
+    <h2 class="story-h2">Our Story</h2>
+    <p class="story-p">At SAII, we know our clients aren't just buying products, they're living a lifestyle. Sunglasses remain at our core, but our clients want more.</p>
+    <p class="story-p">SAII is evolving into exclusive access, intentional experiences, and offerings that reflect quality and thoughtfulness.</p>
+    <div class="story-more" id="storyMore">
+      <p class="story-p">We work with trusted partners, in the travel sector, selective wine farms, and fine dining restaurants, to offer products and experiences defined by care, heritage, and detail.</p>
+      <p class="story-p">SAII ACCESS is about intention, not volume. Every offering is limited, thoughtful, and tailored to our community. From private stays to curated events, everything reflects quality.</p>
+      <p class="story-p">This is SAII. Access to More.</p>
+    </div>
+    <button class="story-toggle" id="storyBtn" onclick="toggleStory()">Read More <i class="fas fa-arrow-right"></i></button>
+  </div>
+</section>
+
+<!-- ACCESS -->
+<section class="access" id="access">
+  <div class="sec-head">
+    <div>
+      <h2 class="sec-title">Exclusive Access</h2>
+      <p class="sec-sub">Limited, thoughtful, available by request only.</p>
+    </div>
+  </div>
+  <div class="access-grid">
+    <div class="acc-card">
+      <i class="fas fa-wine-glass-alt acc-icon"></i>
+      <h3 class="acc-title">Wines & MCC</h3>
+      <p class="acc-desc">Curated selections from world-class vineyards and distilleries. Limited editions and private tastings.</p>
+      <button class="acc-btn" onclick="openWhatsApp('wine')">Request Access <i class="fas fa-arrow-right"></i></button>
+    </div>
+    <div class="acc-card">
+      <i class="fas fa-building acc-icon"></i>
+      <h3 class="acc-title">SAII Residence</h3>
+      <p class="acc-desc">Private stays in exceptional destinations. Personalised service and thoughtful amenities, designed around you.</p>
+      <button class="acc-btn" onclick="openWhatsApp('residence')">Request Access <i class="fas fa-arrow-right"></i></button>
+    </div>
+    <div class="acc-card">
+      <i class="fas fa-compass acc-icon"></i>
+      <h3 class="acc-title">Curated Experiences</h3>
+      <p class="acc-desc">Private events, culinary journeys, and cultural immersions. Guided by our trusted network of partners.</p>
+      <button class="acc-btn" onclick="openWhatsApp('experiences')">Request Access <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div>
+      <a href="#home" class="foot-logo">SAII <em>ACCESS</em></a>
+      <p class="foot-tag">Premium sunglasses and exclusive access for those who live with intention.</p>
+    </div>
+    <div>
+      <p class="foot-col-title">Collections</p>
+      <ul class="foot-links">
+        <li><a href="#shop">Sunglasses</a></li>
+        <li><a href="#" onclick="openWhatsApp('wine');return false;">Wines & MCC</a></li>
+        <li><a href="#" onclick="openWhatsApp('residence');return false;">SAII Residence</a></li>
+        <li><a href="#" onclick="openWhatsApp('experiences');return false;">Experiences</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="foot-col-title">Company</p>
+      <ul class="foot-links">
+        <li><a href="#story">Our Story</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="foot-col-title">Stay Connected</p>
+      <form id="nlForm">
+        <div class="foot-nl-wrap">
+          <input type="email" id="nlEmail" class="foot-nl-input" placeholder="Your email" required>
+          <button type="submit" class="foot-nl-btn"><i class="fas fa-arrow-right"></i></button>
+        </div>
+      </form>
+      <div class="foot-contact">
+        <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6b0a08080e18182b180a020245080406">[email&#160;protected]</a></p>
+        <p><a href="tel:+27794781422">+27 79 478 1422</a></p>
+      </div>
+      <div class="foot-socials">
+        <a href="https://instagram.com/saiiaccess" target="_blank" title="Instagram" class="soc-icon soc-ig">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://facebook.com/saiiaccess" target="_blank" title="Facebook" class="soc-icon soc-fb">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://pinterest.com/saiiaccess" target="_blank" title="Pinterest" class="soc-icon soc-pi">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>&copy; 2025 SAII ACCESS. All rights reserved.</span>
+    <div><a href="#">Privacy</a><a href="#">Terms</a></div>
+  </div>
+</footer>
+
+<!-- REQUEST ACCESS MODAL -->
+<div class="modal-bg" id="accessModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="modalTitle">Request Access</h3>
+      <button class="modal-x" id="modalX"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="accessForm">
+        <div class="f-group"><label class="f-label">Full Name</label><input type="text" class="f-input" id="fName" placeholder="Your name" required></div>
+        <div class="f-group"><label class="f-label">Email</label><input type="email" class="f-input" id="fEmail" placeholder="Your email" required></div>
+        <div class="f-group"><label class="f-label">Phone</label><input type="tel" class="f-input" id="fPhone" placeholder="Your phone number" required></div>
+        <div class="f-group">
+          <label class="f-label">Collection</label>
+          <select class="f-input" id="fInterest" required>
+            <option value="" disabled selected>Select a collection</option>
+            <option value="wine">Wines & MCC</option>
+            <option value="residence">SAII Residence</option>
+            <option value="experiences">Curated Experiences</option>
+          </select>
+        </div>
+        <div class="f-group"><label class="f-label">Notes (optional)</label><textarea class="f-input" id="fMsg" placeholder="Anything you'd like us to know..."></textarea></div>
+        <button type="submit" class="f-submit" id="fSubmit">Submit Request</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-bg" id="successModal">
+  <div class="modal-box">
+    <div class="succ-body">
+      <i class="fas fa-check-circle"></i>
+      <h3>Request Received</h3>
+      <p>Our team will review your request and be in touch within 24 hours.</p>
+      <button id="succClose">Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- CART -->
+<div class="cart-veil" id="cartVeil"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-top">
+    <h3>Your Cart</h3>
+    <button id="cartClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-mid" id="cartMid">
+    <div class="cart-empty"><i class="fas fa-shopping-bag"></i>Your cart is empty</div>
+  </div>
+  <div class="cart-bot">
+    <div class="cart-tot"><span>Total</span><span id="cartTot">$0</span></div>
+    <button class="cart-checkout" id="cartCheckout">Checkout</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// HERO SLIDER
+let slide = 0;
+const slides = document.querySelectorAll('.hero-slide');
+const dots = document.querySelectorAll('.hdot');
+function goSlide(n) {
+  slides[slide].classList.remove('on'); dots[slide].classList.remove('on');
+  slide = (n + slides.length) % slides.length;
+  slides[slide].classList.add('on'); dots[slide].classList.add('on');
+}
+dots.forEach(d => d.addEventListener('click', () => goSlide(+d.dataset.i)));
+setInterval(() => goSlide(slide + 1), 5200);
+
+// TOAST
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2600); }
+
+// MOBILE NAV
+document.getElementById('hamBtn').addEventListener('click', function() {
+  const nav = document.getElementById('mobNav');
+  nav.classList.toggle('on');
+  this.innerHTML = nav.classList.contains('on') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+});
+document.querySelectorAll('#mobNav a').forEach(a => a.addEventListener('click', () => {
+  document.getElementById('mobNav').classList.remove('on');
+  document.getElementById('hamBtn').innerHTML = '<i class="fas fa-bars"></i>';
+}));
+
+// SMOOTH SCROLL
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
+    const t = document.querySelector(this.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+
+// CART
+let cart = [];
+function updateCart() {
+  document.getElementById('cartCount').textContent = cart.length;
+  const mid = document.getElementById('cartMid');
+  const tot = document.getElementById('cartTot');
+  if (!cart.length) {
+    mid.innerHTML = '<div class="cart-empty"><i class="fas fa-shopping-bag"></i>Your cart is empty</div>';
+    tot.textContent = '$0'; return;
+  }
+  let sum = 0;
+  mid.innerHTML = cart.map(function(it, i) {
+    sum += it.price;
+    return '<div class="c-item"><img src="' + it.img + '" alt="' + it.name + '"><div class="c-item-info"><p class="c-item-name">' + it.name + '</p><p class="c-item-sub">' + it.desc + '</p><p class="c-item-price">$' + it.price.toLocaleString() + '</p></div><button class="c-item-rm" onclick="rmItem(' + i + ')"><i class="fas fa-times"></i></button></div>';
+  }).join('');
+  tot.textContent = '$' + sum.toLocaleString();
+}
+window.rmItem = function(i) { var n = cart[i].name; cart.splice(i, 1); updateCart(); toast(n + ' removed'); };
+function openCart() { document.getElementById('cartPanel').classList.add('on'); document.getElementById('cartVeil').classList.add('on'); }
+function closeCart() { document.getElementById('cartPanel').classList.remove('on'); document.getElementById('cartVeil').classList.remove('on'); }
+document.getElementById('cartOpen').addEventListener('click', openCart);
+document.getElementById('cartClose').addEventListener('click', closeCart);
+document.getElementById('cartVeil').addEventListener('click', closeCart);
+document.getElementById('cartCheckout').addEventListener('click', function() {
+  if (!cart.length) { toast('Cart is empty'); return; }
+  var s = cart.reduce(function(a, i) { return a + i.price; }, 0);
+  cart = []; updateCart(); closeCart(); toast('Order confirmed, $' + s.toLocaleString());
+});
+document.querySelectorAll('.shop-add').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    cart.push({ name: this.dataset.name, price: +this.dataset.price, desc: this.dataset.desc, img: this.dataset.img });
+    updateCart();
+    var orig = this.textContent;
+    this.classList.add('added'); this.textContent = 'Added';
+    toast(this.dataset.name + ' added to cart');
+    var self = this;
+    setTimeout(function() { self.classList.remove('added'); self.textContent = orig; }, 2000);
+  });
+});
+
+// STORY READ MORE
+function toggleStory() {
+  var more = document.getElementById('storyMore');
+  var btn = document.getElementById('storyBtn');
+  var open = more.style.display === 'block';
+  more.style.display = open ? 'none' : 'block';
+  btn.innerHTML = open ? 'Read More <i class="fas fa-arrow-right"></i>' : 'Read Less <i class="fas fa-arrow-left"></i>';
+}
+
+// WHATSAPP
+var waNumber = '27794781422';
+function openWhatsApp(type) {
+  var messages = {
+    wine: 'Hi SAII ACCESS! I would like to browse your Wines and MCC catalogue.',
+    residence: 'Hi SAII ACCESS! I would like to browse your SAII Residence catalogue.',
+    experiences: 'Hi SAII ACCESS! I would like to browse your Curated Experiences catalogue.',
+    general: 'Hi SAII ACCESS! I would like to browse your exclusive access catalogue.'
+  };
+  var msg = encodeURIComponent(messages[type] || 'Hi SAII ACCESS! I would like to browse your exclusive access catalogue.');
+  var url = 'https://wa.me/' + waNumber + '?text=' + msg;
+  var a = document.createElement('a');
+  a.href = url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+// MODAL (hero Request Access button still opens modal)
+var modalTitles = { wine: 'Wines & MCC', residence: 'SAII Residence', experiences: 'Curated Experiences' };
+window.openModal = function(type) {
+  document.getElementById('modalTitle').textContent = modalTitles[type] || 'Request Access';
+  document.getElementById('fInterest').value = type || '';
+  document.getElementById('accessModal').classList.add('on');
+};
+document.getElementById('modalX').addEventListener('click', function() { document.getElementById('accessModal').classList.remove('on'); });
+document.getElementById('accessModal').addEventListener('click', function(e) { if (e.target.id === 'accessModal') document.getElementById('accessModal').classList.remove('on'); });
+document.getElementById('accessForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var btn = document.getElementById('fSubmit'); btn.textContent = 'Submitting...'; btn.disabled = true;
+  setTimeout(function() {
+    document.getElementById('accessModal').classList.remove('on');
+    document.getElementById('successModal').classList.add('on');
+    document.getElementById('accessForm').reset();
+    btn.textContent = 'Submit Request'; btn.disabled = false;
+  }, 1200);
+});
+document.getElementById('succClose').addEventListener('click', function() { document.getElementById('successModal').classList.remove('on'); });
+document.getElementById('successModal').addEventListener('click', function(e) { if (e.target.id === 'successModal') document.getElementById('successModal').classList.remove('on'); });
+
+// NEWSLETTER
+document.getElementById('nlForm').addEventListener('submit', function(e) { e.preventDefault(); document.getElementById('nlEmail').value = ''; toast('Subscribed - thank you!'); });
+
+// ESC KEY
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.getElementById('accessModal').classList.remove('on');
+    document.getElementById('successModal').classList.remove('on');
+    closeCart();
+  }
+});
+</script><script>
+// HERO SLIDER
+let slide = 0;
+const slides = document.querySelectorAll('.hero-slide');
+const dots = document.querySelectorAll('.hdot');
+function goSlide(n) {
+  slides[slide].classList.remove('on'); dots[slide].classList.remove('on');
+  slide = (n + slides.length) % slides.length;
+  slides[slide].classList.add('on'); dots[slide].classList.add('on');
+}
+dots.forEach(d => d.addEventListener('click', () => goSlide(+d.dataset.i)));
+setInterval(() => goSlide(slide + 1), 5200);
+
+// TOAST
+const toast = msg => { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2600); };
+
+// MOBILE NAV
+const hamBtn = document.getElementById('hamBtn');
+const mobNav = document.getElementById('mobNav');
+hamBtn.addEventListener('click', () => { mobNav.classList.toggle('on'); hamBtn.innerHTML = mobNav.classList.contains('on') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>'; });
+mobNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { mobNav.classList.remove('on'); hamBtn.innerHTML = '<i class="fas fa-bars"></i>'; }));
+
+// SMOOTH SCROLL
+document.querySelectorAll('a[href^="#"]').forEach(a => { a.addEventListener('click', e => { const t = document.querySelector(a.getAttribute('href')); if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); } }); });
+
+// CART
+let cart = [];
+const updateCart = () => {
+  document.getElementById('cartCount').textContent = cart.length;
+  const mid = document.getElementById('cartMid');
+  const tot = document.getElementById('cartTot');
+  if (!cart.length) { mid.innerHTML = '<div class="cart-empty"><i class="fas fa-shopping-bag"></i>Your cart is empty</div>'; tot.textContent = '$0'; return; }
+  let sum = 0;
+  mid.innerHTML = cart.map((it, i) => { sum += it.price; return `<div class="c-item"><img src="${it.img}" alt="${it.name}"><div class="c-item-info"><p class="c-item-name">${it.name}</p><p class="c-item-sub">${it.desc}</p><p class="c-item-price">$${it.price.toLocaleString()}</p></div><button class="c-item-rm" onclick="rmItem(${i})"><i class="fas fa-times"></i></button></div>`; }).join('');
+  tot.textContent = '$' + sum.toLocaleString();
+};
+window.rmItem = i => { const n = cart[i].name; cart.splice(i, 1); updateCart(); toast(n + ' removed'); };
+const openCart = () => { document.getElementById('cartPanel').classList.add('on'); document.getElementById('cartVeil').classList.add('on'); };
+const closeCart = () => { document.getElementById('cartPanel').classList.remove('on'); document.getElementById('cartVeil').classList.remove('on'); };
+document.getElementById('cartOpen').addEventListener('click', openCart);
+document.getElementById('cartClose').addEventListener('click', closeCart);
+document.getElementById('cartVeil').addEventListener('click', closeCart);
+document.getElementById('cartCheckout').addEventListener('click', () => { if (!cart.length) { toast('Cart is empty'); return; } const s = cart.reduce((a, i) => a + i.price, 0); cart = []; updateCart(); closeCart(); toast('Order confirmed, $' + s.toLocaleString()); });
+document.querySelectorAll('.shop-add').forEach(btn => {
+  btn.addEventListener('click', function () {
+    cart.push({ name: this.dataset.name, price: +this.dataset.price, desc: this.dataset.desc, img: this.dataset.img });
+    updateCart();
+    const orig = this.textContent;
+    this.classList.add('added'); this.textContent = '✓';
+    toast(this.dataset.name + ' added');
+    setTimeout(() => { this.classList.remove('added'); this.textContent = orig; }, 2000);
+  });
+});
+
+// STORY READ MORE
+function toggleStory() {
+  const more = document.getElementById('storyMore');
+  const btn = document.getElementById('storyBtn');
+  const open = more.style.display === 'block';
+  more.style.display = open ? 'none' : 'block';
+  btn.innerHTML = open ? 'Read More <i class="fas fa-arrow-right"></i>' : 'Read Less <i class="fas fa-arrow-left"></i>';
+}
+
+// MODAL
+const titles = { wine: 'Wines & MCC', residence: 'SAII Residence', experiences: 'Curated Experiences' };
+window.openModal = type => { document.getElementById('modalTitle').textContent = titles[type] || 'Request Access'; document.getElementById('fInterest').value = type || ''; document.getElementById('accessModal').classList.add('on'); };
+document.getElementById('modalX').addEventListener('click', () => document.getElementById('accessModal').classList.remove('on'));
+document.getElementById('accessModal').addEventListener('click', e => { if (e.target.id === 'accessModal') document.getElementById('accessModal').classList.remove('on'); });
+document.getElementById('accessForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const btn = document.getElementById('fSubmit'); btn.textContent = 'Submitting...'; btn.disabled = true;
+  setTimeout(() => { document.getElementById('accessModal').classList.remove('on'); document.getElementById('successModal').classList.add('on'); document.getElementById('accessForm').reset(); btn.textContent = 'Submit Request'; btn.disabled = false; }, 1200);
+});
+document.getElementById('succClose').addEventListener('click', () => document.getElementById('successModal').classList.remove('on'));
+document.getElementById('successModal').addEventListener('click', e => { if (e.target.id === 'successModal') document.getElementById('successModal').classList.remove('on'); });
+
+// NEWSLETTER
+document.getElementById('nlForm').addEventListener('submit', e => { e.preventDefault(); document.getElementById('nlEmail').value = ''; toast('Subscribed, thank you!'); });
+
+
+// WHATSAPP
+const waNumber = '27783871768'; // Replace with your WhatsApp number
+const waMessages = {
+  wine: 'Hi SAII ACCESS! I'm interested in your Wines & MCC collection and would like to request access.',
